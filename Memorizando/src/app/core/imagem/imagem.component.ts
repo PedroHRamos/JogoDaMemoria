@@ -7,9 +7,24 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ImagemComponent implements OnInit {
 
-  constructor() { }
+  backImage: string;
+  frontImage: string;
+  image: string;
+  isFliped: boolean;
+
+  constructor() { 
+    this.backImage = '/../../../assets/img/interrogacao.png';
+    this.frontImage = './../../../assets/img/amongus.png';
+    this.image = this.backImage;
+    this.isFliped = false;
+  }
 
   ngOnInit(): void {
+  }
+
+  flip(){
+    this.image = this.frontImage;
+    this.isFliped = true;
   }
 
 }
