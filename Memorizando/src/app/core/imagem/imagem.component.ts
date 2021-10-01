@@ -17,6 +17,8 @@ export class ImagemComponent implements OnInit {
     this.frontImage = './../../../assets/img/amongus.png';
     this.image = this.backImage;
     this.isFliped = false;
+    // In the future the front image has to be pass in the constructor.
+    // So the cards controller can define the cards value on the instances of cards
   }
 
   ngOnInit(): void {
