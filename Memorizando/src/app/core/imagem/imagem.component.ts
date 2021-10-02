@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-imagem',
@@ -12,9 +12,13 @@ export class ImagemComponent implements OnInit {
   image: string;
   isFliped: boolean;
 
-  constructor() { 
+  @Input() id: number = 0;
+  @Input() fileName: string = '';
+
+  constructor() {
     this.backImage = '/../../../assets/img/interrogacao.png';
-    this.frontImage = './../../../assets/img/amongus.png';
+    console.log('Filename: ' + this.fileName);
+    this.frontImage = '/../../../assets/img/' + this.fileName;
     this.image = this.backImage;
     this.isFliped = false;
     // In the future the front image has to be pass in the constructor.
@@ -25,7 +29,7 @@ export class ImagemComponent implements OnInit {
   }
 
   flip(){
-    this.image = this.frontImage;
+    this.image = '/../../../assets/img/' + this.fileName;
     this.isFliped = true;
   }
 
