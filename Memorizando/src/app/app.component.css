@@ -1,0 +1,3 @@
+app-card-manager:nth-child(4n){
+    white-space: pre-line !important;
+}

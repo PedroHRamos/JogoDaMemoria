@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ImageDTO } from 'src/dto/ImageDTO';
 
 @Component({
   selector: 'app-card-manager',
@@ -7,7 +8,32 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CardManagerComponent implements OnInit {
 
-  constructor() { }
+  numberOfCards: number;
+  images: Array<ImageDTO>;
+  imageNames: Array<string>;
+  image: ImageDTO;
+  numberOfRows: number;
+
+  constructor() {
+
+    this.imageNames = ['amongus.png', 'dev_descomplicado.jpg', 'dima.png', 'js.png'];
+    this.images = new Array<ImageDTO>();
+    this.image = new ImageDTO(1, 'a');
+    this.numberOfRows = 2;
+
+    this.numberOfCards = 4;
+    for ( let i = 0; i < this.numberOfCards * 2; i++){
+      console.log(this.imageNames[this.imageNames.length - 1]);
+      this.image = new ImageDTO(i, this.imageNames[this.imageNames.length - 1]);
+      this.images.push(this.image);
+      i++;
+      console.log(this.imageNames[this.imageNames.length - 1]);
+      this.image = new ImageDTO(i, this.imageNames[this.imageNames.length - 1]);
+      this.images.push(this.image);
+      this.imageNames.pop();
+    }
+
+  }
 
   ngOnInit(): void {
   }
@@ -37,9 +63,8 @@ export class CardManagerComponent implements OnInit {
         *Control the rounds, if the user mathc 2 cards or not, if the user play again, who plays next, the end of the game, etc.
 
     *I think the best way to segregate the responsibility is
-      *Making a card-manager that will returnn a canvas(view) to the core Model
-      *A core that will be responsable to define the rooms, add/remove players
-      *Throught socket.io show the rounds to all players of a room
+      *Making a card-manager that will returnn a canvas(view) to the socket
+      *Thhe socket will be responsable to define the rooms, add/remove players
 
 */
 
