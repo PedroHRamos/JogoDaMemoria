@@ -21,6 +21,7 @@ export class CardManagerComponent implements OnInit {
     this.image = new ImageDTO(1, 'a');
     this.numberOfRows = 2;
 
+
     this.numberOfCards = 4;
     for ( let i = 0; i < this.numberOfCards * 2; i++){
       console.log(this.imageNames[this.imageNames.length - 1]);

@@ -28,7 +28,7 @@ export class ImagemComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  flip(){
+  flip(): void{
     this.image = '/../../../assets/img/' + this.fileName;
     this.isFliped = true;
   }
