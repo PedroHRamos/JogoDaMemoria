@@ -28,9 +28,10 @@ export class ImagemComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  flip(){
-    this.image = '/../../../assets/img/' + this.fileName;
+  flip(): void{
+    this.image = '/../../../assets/img/' + this.fileName;;
     this.isFliped = true;
+    //rcomunicar com o gerenciador de cartas a mudança de estado do flip, para que ele possa setar no dto e verificar o match
   }
 
 }
