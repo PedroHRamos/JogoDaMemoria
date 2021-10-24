@@ -13,6 +13,8 @@ export class CardManagerComponent implements OnInit {
   imageNames: Array<string>;
   image: ImageDTO;
   numberOfRows: number;
+  matchesCount: number;
+  cardsActivesCount: number
 
   constructor() {
 
@@ -20,6 +22,8 @@ export class CardManagerComponent implements OnInit {
     this.images = new Array<ImageDTO>();
     this.image = new ImageDTO(1, 'a');
     this.numberOfRows = 2;
+    this.matchesCount = 0;
+    this.cardsActivesCount = 0;
 
     this.numberOfCards = 4;
     for ( let i = 0; i < this.numberOfCards * 2; i++){
@@ -43,8 +47,38 @@ export class CardManagerComponent implements OnInit {
       .map(a => a[1]);
   }
 
+  cardMatchVerifier(images: Array<ImageDTO>): boolean{
+
+    let image1 = '';
+    let image2 = ''; 
+
+    for( let i = 0; i < images.length-1; i++ ){
+      //implementar
+    }
+
+    return false;
+  }
+
   ngOnInit(): void {
   }
+
+  trataClick(): void{
+    this.cardsActivesCount++;
+    if(this.cardsActivesCount == 2){
+      this.resolveAfter1Second(10).then(value=>{
+        //implementar função de match
+      });
+    }
+  }
+
+  resolveAfter1Second(x: any) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(x);
+      }, 1300);
+    });
+  }
+
 /*
   SINGLE PLAYER
     *The next step is think in some ways to manage the cards

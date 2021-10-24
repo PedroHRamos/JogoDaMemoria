@@ -1,4 +1,4 @@
-<div *ngFor="let image of images">
+<div *ngFor="let image of images" (click)="trataClick()">
     <app-imagem fileName="{{image.fileName}}"></app-imagem>
 </div>
 
