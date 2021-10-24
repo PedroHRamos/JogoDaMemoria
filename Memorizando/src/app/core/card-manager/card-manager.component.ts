@@ -21,7 +21,6 @@ export class CardManagerComponent implements OnInit {
     this.image = new ImageDTO(1, 'a');
     this.numberOfRows = 2;
 
-
     this.numberOfCards = 4;
     for ( let i = 0; i < this.numberOfCards * 2; i++){
       console.log(this.imageNames[this.imageNames.length - 1]);
@@ -34,6 +33,14 @@ export class CardManagerComponent implements OnInit {
       this.imageNames.pop();
     }
 
+    this.images = this.shuffleArray(this.images);
+
+  }
+
+  shuffleArray(anArray: any[]): any[] {
+    return anArray.map(a => [Math.random(), a])
+      .sort((a, b) => a[0] - b[0])
+      .map(a => a[1]);
   }
 
   ngOnInit(): void {
