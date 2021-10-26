@@ -1,4 +1,6 @@
 <div *ngFor="let image of images" (click)="trataClick()">
-    <app-imagem fileName="{{image.fileName}}"></app-imagem>
+    <span class="border border-dark card div-card" (click)="flip()" id="{{image.id}}">
+        <img src="{{image.fileName}}>">
+    </span>
 </div>
 
