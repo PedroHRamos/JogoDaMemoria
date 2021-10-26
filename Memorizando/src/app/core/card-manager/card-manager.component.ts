@@ -93,7 +93,7 @@ export class CardManagerComponent implements OnInit {
     this.cardsActivesCount++;
     if(this.cardsActivesCount == 2){
       this.resolveAfter1Second(10).then(value=>{
-        //implementar função de match
+        //animação necessária
       });
     }
   }
