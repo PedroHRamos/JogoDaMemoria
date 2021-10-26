@@ -41,6 +41,19 @@ export class CardManagerComponent implements OnInit {
 
   }
 
+  flip( imagem: ImageDTO ): void{
+    if ( this.cardsActivesCount < 2 ){
+      if ( !imagem.isImageFliped ){
+        imagem.fileName = imagem.frontFileName;
+        imagem.isImageFliped = true;
+      }
+    }
+  }
+
+  unFlip( id: number ): void{
+
+  }
+
   shuffleArray(anArray: any[]): any[] {
     return anArray.map(a => [Math.random(), a])
       .sort((a, b) => a[0] - b[0])
@@ -49,11 +62,25 @@ export class CardManagerComponent implements OnInit {
 
   cardMatchVerifier(images: Array<ImageDTO>): boolean{
 
-    let image1 = '';
-    let image2 = ''; 
+    let imageAux = new ImageDTO(999, 'abc');
+    let imageFlipedCount = 0;
 
-    for( let i = 0; i < images.length-1; i++ ){
-      //implementar
+    for ( let i = 0; i < images.length - 1; i++ ){
+      if ( images[i].isImageFliped ){
+        if ( imageFlipedCount == 0 ){
+          imageAux = new ImageDTO( images[i].id, images[i].frontFileName );
+          imageFlipedCount++;
+        }else{
+          images[i].frontFileName = imageAux.frontFileName;
+          images[i].isCardOutOfGame = true;
+          images[imageAux.id].isCardOutOfGame = true;
+          imageFlipedCount++;
+        }
+      }
+    }
+
+    if ( imageFlipedCount == 2 ){
+      return true;
     }
 
     return false;
