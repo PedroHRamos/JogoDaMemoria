@@ -14,31 +14,40 @@ export class CardManagerComponent implements OnInit {
   image: ImageDTO;
   numberOfRows: number;
   matchesCount: number;
-  cardsActivesCount: number
+  cardsActivesCount: number;
+  pointsUserDRAFT: number;
+  imagePath: string;
 
   constructor() {
 
-    this.imageNames = ['amongus.png', 'dev_descomplicado.jpg', 'dima.png', 'js.png'];
+    this.imageNames = ['amongus.png', 'dev_descomplicado.jpg', 'diamante.png', 'js.png'];
     this.images = new Array<ImageDTO>();
     this.image = new ImageDTO(1, 'a');
     this.numberOfRows = 2;
     this.matchesCount = 0;
     this.cardsActivesCount = 0;
+    this.pointsUserDRAFT = 0;
+    this.imagePath = 'assets/img/';
+
 
     this.numberOfCards = 4;
     for ( let i = 0; i < this.numberOfCards * 2; i++){
       console.log(this.imageNames[this.imageNames.length - 1]);
-      this.image = new ImageDTO(i, this.imageNames[this.imageNames.length - 1]);
+      this.image = new ImageDTO(i, this.imagePath + this.imageNames[this.imageNames.length - 1]);
       this.images.push(this.image);
       i++;
       console.log(this.imageNames[this.imageNames.length - 1]);
-      this.image = new ImageDTO(i, this.imageNames[this.imageNames.length - 1]);
+      this.image = new ImageDTO(i, this.imagePath + this.imageNames[this.imageNames.length - 1]);
       this.images.push(this.image);
       this.imageNames.pop();
     }
 
     this.images = this.shuffleArray(this.images);
 
+  }
+
+  isEndOfGame(){
+    // implement the logic to verify the end of the game
   }
 
   flip( imagem: ImageDTO ): void{
@@ -50,8 +59,13 @@ export class CardManagerComponent implements OnInit {
     }
   }
 
-  unFlip( id: number ): void{
-
+  unFlipAllCards(): void{
+    for ( let i = 0; i < this.images.length ; i++ ){
+      if ( this.images[i].isImageFliped ){
+        this.images[i].fileName = this.images[i].backFileName;
+        this.images[i].isImageFliped = false;
+      }
+    }
   }
 
   shuffleArray(anArray: any[]): any[] {
@@ -60,49 +74,71 @@ export class CardManagerComponent implements OnInit {
       .map(a => a[1]);
   }
 
-  cardMatchVerifier(images: Array<ImageDTO>): boolean{
+  cardMatchVerifier(): boolean{
 
-    let imageAux = new ImageDTO(999, 'abc');
     let imageFlipedCount = 0;
+    let positionImageAux = 0;
 
-    for ( let i = 0; i < images.length - 1; i++ ){
-      if ( images[i].isImageFliped ){
-        if ( imageFlipedCount == 0 ){
-          imageAux = new ImageDTO( images[i].id, images[i].frontFileName );
+    for ( let i = 0; i < this.images.length ; i++ ){
+      if ( this.images[i].isImageFliped ){
+        if ( imageFlipedCount === 0 ){
+          positionImageAux = i;
           imageFlipedCount++;
         }else{
-          images[i].frontFileName = imageAux.frontFileName;
-          images[i].isCardOutOfGame = true;
-          images[imageAux.id].isCardOutOfGame = true;
           imageFlipedCount++;
+          if ( this.images[positionImageAux].frontFileName === this.images[i].frontFileName ){
+            this.images[i].isCardOutOfGame = true;
+            this.images[positionImageAux].isCardOutOfGame = true;
+            imageFlipedCount = 0;
+            return true;
+          }
         }
       }
     }
-
-    if ( imageFlipedCount == 2 ){
-      return true;
-    }
-
+    imageFlipedCount = 0;
+    //isEndOfGame()
     return false;
   }
 
   ngOnInit(): void {
   }
 
-  trataClick(): void{
+  async trataClick( imagem: ImageDTO ): Promise<void>{
+
+    this.flip( imagem );
     this.cardsActivesCount++;
-    if(this.cardsActivesCount == 2){
-      this.resolveAfter1Second(10).then(value=>{
-        //animação necessária
-      });
+    let hasMatch = false;
+    const imageclicked = 'Imagem Clicada: \n\t id: ' + imagem.id + '\n\t FrontFile: '
+    + imagem.frontFileName + '\n\t FileName: ' + imagem.fileName + '\n\t OutOfGame: ' + imagem.isCardOutOfGame
+    + '\n\t isImageFliped: ' + imagem.isImageFliped;
+
+    console.log(imageclicked);
+
+    if ( this.cardsActivesCount === 2 ){
+
+      await this.resolveAfterSecond(10).then( value => {});
+      hasMatch = this.cardMatchVerifier();
+      this.cardsActivesCount = 0;
+
+      if ( hasMatch ){
+        // Change this function in the future to set points to the user that matched the cards and animate it
+        alert('Acertô mizeravi');
+        this.pointsUserDRAFT++;
+        this.unFlipAllCards();
+      } else {
+        alert('Errou');
+        this.unFlipAllCards();
+      }
+
     }
+
   }
 
-  resolveAfter1Second(x: any) {
+  async resolveAfterSecond(x: any) {
     return new Promise(resolve => {
       setTimeout(() => {
         resolve(x);
-      }, 1300);
+      }, 500);
     });
   }
 

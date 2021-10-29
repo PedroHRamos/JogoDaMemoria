@@ -1,6 +1,14 @@
-<div *ngFor="let image of images" (click)="trataClick()">
-    <span class="border border-dark card div-card" (click)="flip()" id="{{image.id}}">
-        <img src="{{image.fileName}}>">
-    </span>
+<div>
+    <span>Pontos: {{pointsUserDRAFT}}</span>
 </div>
+
+<br>
+
+<span *ngFor="let image of images">
+    <span *ngIf="!image.isCardOutOfGame">
+        <span class="border border-dark card div-card" (click)="trataClick(image)" id="{{image.id}}">
+            <img src="{{image.fileName}}">
+        </span>
+    </span>
+</span>
 

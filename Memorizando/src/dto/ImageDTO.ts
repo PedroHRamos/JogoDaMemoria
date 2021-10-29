@@ -8,11 +8,11 @@ export class ImageDTO {
 
     constructor(id: number, fileName: string){
         this.id = id;
-        this.fileName = fileName;
+        this.fileName = 'assets/img/interrogacao.png';
         this.frontFileName = fileName;
         this.isImageFliped = false;
         this.isCardOutOfGame = false;
-        this.backFileName = '/../../../assets/img/interrogacao.png';
+        this.backFileName = 'assets/img/interrogacao.png';
     }
 
 }
