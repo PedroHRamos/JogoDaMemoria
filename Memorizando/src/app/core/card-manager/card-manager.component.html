@@ -10,5 +10,9 @@
             <img src="{{image.fileName}}">
         </span>
     </span>
+    <span *ngIf="image.isCardOutOfGame">
+        <span class="border border-dark card div-card" id="{{image.id}}">
+        </span>
+    </span>
 </span>
 
