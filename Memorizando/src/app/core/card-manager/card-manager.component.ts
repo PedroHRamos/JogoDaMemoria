@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ImageDTO } from 'src/dto/ImageDTO';
-import * as io from 'socket.io-client';
+import {io} from 'socket.io-client';
 
 @Component({
   selector: 'app-card-manager',
@@ -19,6 +19,8 @@ export class CardManagerComponent implements OnInit {
   pointsUserDRAFT: number;
   imagePath: string;
   isGameOn: boolean;
+  private socket: any;
+  public data: any;
 
   constructor() {
 
@@ -31,9 +33,10 @@ export class CardManagerComponent implements OnInit {
     this.pointsUserDRAFT = 0;
     this.imagePath = 'assets/img/';
     this.isGameOn = true;
-
-
     this.numberOfCards = 4;
+    // Connect Socket with server URL
+    this.socket = io('localhost:3000');
+
     for ( let i = 0; i < this.numberOfCards * 2; i++){
       console.log(this.imageNames[this.imageNames.length - 1]);
       this.image = new ImageDTO(i, this.imagePath + this.imageNames[this.imageNames.length - 1]);
@@ -47,6 +50,14 @@ export class CardManagerComponent implements OnInit {
 
     this.images = this.shuffleArray(this.images);
 
+  }
+
+  emitImagesForAll(){
+    let aux = this.images;
+
+    this.socket.on('notification', (aux: ImageDTO[]) => {
+      this.images = aux;
+    });
   }
 
   isEndOfGame(): void{
@@ -116,6 +127,9 @@ export class CardManagerComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    this.emitImagesForAll();
+
   }
 
   async trataClick( imagem: ImageDTO ): Promise<void>{
@@ -148,8 +162,11 @@ export class CardManagerComponent implements OnInit {
         }
 
       }
+      
     }
 
+    this.emitImagesForAll();
+    
     this.isEndOfGame();
 
   }
