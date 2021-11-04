@@ -4,12 +4,12 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ## Development server
 
-Run `cd socket-server`.
+Run `cd socket-server`
 
-Run `npm init`.
+Run `npm init`
 
-Run `npm i express socket.io express --save` to instal npm. I include node modules on git ignore because they are very expansive.
+Run `npm i express socket.io express --save` to instal npm. I include node modules on git ignore because they are very expansive
 
-Run `cd..`.
+Run `cd..`
 
-Run `cd Memorizando`.
+Run `cd Memorizando`
