@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ImageDTO } from 'src/dto/ImageDTO';
+import * as io from 'socket.io-client';
 
 @Component({
   selector: 'app-card-manager',

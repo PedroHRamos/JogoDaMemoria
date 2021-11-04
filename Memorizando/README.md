@@ -6,6 +6,8 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 Run `npm install` to instal npm. I include node modules on git ignore because they are very expansive
 
+Run `npm i socket.io-client @types/socket.io-client --save` this is an Angular wrapper over socket.io client libraries
+
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 ## Code scaffolding
