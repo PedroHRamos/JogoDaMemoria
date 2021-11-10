@@ -1,3 +1,4 @@
+import { WebSocketService } from './web-socket.service';
 import { Component, OnInit } from '@angular/core';
 import { ImageDTO } from 'src/dto/ImageDTO';
 
@@ -17,8 +18,9 @@ export class CardManagerComponent implements OnInit {
   cardsActivesCount: number;
   pointsUserDRAFT: number;
   imagePath: string;
+  isGameOn: boolean;
 
-  constructor() {
+  constructor(private webSocketService: WebSocketService) {
 
     this.imageNames = ['amongus.png', 'dev_descomplicado.jpg', 'diamante.png', 'js.png'];
     this.images = new Array<ImageDTO>();
@@ -28,6 +30,7 @@ export class CardManagerComponent implements OnInit {
     this.cardsActivesCount = 0;
     this.pointsUserDRAFT = 0;
     this.imagePath = 'assets/img/';
+    this.isGameOn = true;
 
 
     this.numberOfCards = 4;
@@ -46,36 +49,45 @@ export class CardManagerComponent implements OnInit {
 
   }
 
-  isEndOfGame(){
-    // implement the logic to verify the end of the game
+  ngOnInit(): void {
+    this.webSocketService.listen('test event', ).subscribe((data) => {
+      console.log(data);
+    });
   }
 
-  flip( imagem: ImageDTO ): void{
-    if ( this.cardsActivesCount < 2 ){
-      if ( !imagem.isImageFliped ){
-        imagem.fileName = imagem.frontFileName;
-        imagem.isImageFliped = true;
+  async trataClick( imagem: ImageDTO ): Promise<void>{
+    if ( this.isGameOn ){
+
+      this.flip( imagem );
+      this.cardsActivesCount++;
+      let hasMatch = false;
+      const imageclicked = 'Imagem Clicada: \n\t id: ' + imagem.id + '\n\t FrontFile: '
+      + imagem.frontFileName + '\n\t FileName: ' + imagem.fileName + '\n\t OutOfGame: ' + imagem.isCardOutOfGame
+      + '\n\t isImageFliped: ' + imagem.isImageFliped;
+
+      console.log(imageclicked);
+
+      if ( this.cardsActivesCount === 2 ){
+
+        await this.resolveAfterSecond(10).then( value => {});
+        hasMatch = this.cardMatchVerifier();
+        this.cardsActivesCount = 0;
+
+        if ( hasMatch ){
+          // Change this function in the future to set points to the user that matched the cards and animate it
+          alert('Acertô mizeravi');
+          this.pointsUserDRAFT++;
+          this.unFlipAllCards();
+        } else {
+          alert('Errou');
+          this.unFlipAllCards();
+        }
       }
     }
-  }
-
-  unFlipAllCards(): void{
-    for ( let i = 0; i < this.images.length ; i++ ){
-      if ( this.images[i].isImageFliped ){
-        this.images[i].fileName = this.images[i].backFileName;
-        this.images[i].isImageFliped = false;
-      }
-    }
-  }
-
-  shuffleArray(anArray: any[]): any[] {
-    return anArray.map(a => [Math.random(), a])
-      .sort((a, b) => a[0] - b[0])
-      .map(a => a[1]);
+    this.isEndOfGame();
   }
 
   cardMatchVerifier(): boolean{
-
     let imageFlipedCount = 0;
     let positionImageAux = 0;
 
@@ -96,42 +108,50 @@ export class CardManagerComponent implements OnInit {
       }
     }
     imageFlipedCount = 0;
-    //isEndOfGame()
     return false;
   }
 
-  ngOnInit(): void {
-  }
+  isEndOfGame(): void{
 
-  async trataClick( imagem: ImageDTO ): Promise<void>{
+    let cardsOutOfGame = 0;
 
-    this.flip( imagem );
-    this.cardsActivesCount++;
-    let hasMatch = false;
-    const imageclicked = 'Imagem Clicada: \n\t id: ' + imagem.id + '\n\t FrontFile: '
-    + imagem.frontFileName + '\n\t FileName: ' + imagem.fileName + '\n\t OutOfGame: ' + imagem.isCardOutOfGame
-    + '\n\t isImageFliped: ' + imagem.isImageFliped;
-
-    console.log(imageclicked);
-
-    if ( this.cardsActivesCount === 2 ){
-
-      await this.resolveAfterSecond(10).then( value => {});
-      hasMatch = this.cardMatchVerifier();
-      this.cardsActivesCount = 0;
-
-      if ( hasMatch ){
-        // Change this function in the future to set points to the user that matched the cards and animate it
-        alert('Acertô mizeravi');
-        this.pointsUserDRAFT++;
-        this.unFlipAllCards();
-      } else {
-        alert('Errou');
-        this.unFlipAllCards();
+    for ( let i = 0; i < this.images.length ; i++ ){
+      if ( this.images[i].isCardOutOfGame ){
+        cardsOutOfGame++;
       }
-
     }
 
+    if ( cardsOutOfGame === this.images.length ){
+      this.isGameOn = false;
+      alert('Você ganhou!');
+    }
+
+  }
+
+  flip( imagem: ImageDTO ): void{
+    if ( this.cardsActivesCount < 2 ){
+      if ( !imagem.isImageFliped ){
+        imagem.fileName = imagem.frontFileName;
+        imagem.isImageFliped = true;
+        imagem.ifFlipClass = 'flip';
+      }
+    }
+  }
+
+  unFlipAllCards(): void{
+    for ( let i = 0; i < this.images.length ; i++ ){
+      if ( this.images[i].isImageFliped ){
+        this.images[i].fileName = this.images[i].backFileName;
+        this.images[i].isImageFliped = false;
+        this.images[i].ifFlipClass = '';
+      }
+    }
+  }
+
+  shuffleArray(anArray: any[]): any[] {
+    return anArray.map(a => [Math.random(), a])
+      .sort((a, b) => a[0] - b[0])
+      .map(a => a[1]);
   }
 
   async resolveAfterSecond(x: any) {
@@ -144,14 +164,7 @@ export class CardManagerComponent implements OnInit {
 
 /*
   SINGLE PLAYER
-    *The next step is think in some ways to manage the cards
-    *I think the best way to do this is creating some instances of x cards
-    *The first step would be load the list of images names. In a first moment, this list can be a simple .json just to store the names
-        *IDEA FOR AN POSSIBLE FUTURE: We can think about to save the images in a database
-    *The second step would be load in this json the number of cards that could be loaded in the screen
-    *The next step can be the logic of how to choice a random image name, set this name for an card
-    *The next step can be the logic that back the cards to the original configuration if the user dont match the 2 cards
-        * Else the user got a point, we take off theese 2 cards off the screen
+    * Basics OK.
 
   MULTIPLAYER
     *All the steps above
