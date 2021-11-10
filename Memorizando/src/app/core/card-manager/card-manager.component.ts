@@ -133,6 +133,7 @@ export class CardManagerComponent implements OnInit {
       if ( !imagem.isImageFliped ){
         imagem.fileName = imagem.frontFileName;
         imagem.isImageFliped = true;
+        imagem.ifFlipClass = 'flip';
       }
     }
   }
@@ -142,6 +143,7 @@ export class CardManagerComponent implements OnInit {
       if ( this.images[i].isImageFliped ){
         this.images[i].fileName = this.images[i].backFileName;
         this.images[i].isImageFliped = false;
+        this.images[i].ifFlipClass = '';
       }
     }
   }

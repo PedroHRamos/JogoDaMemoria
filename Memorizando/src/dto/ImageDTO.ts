@@ -5,6 +5,7 @@ export class ImageDTO {
     frontFileName: string;
     isImageFliped: boolean;
     isCardOutOfGame: boolean;
+    ifFlipClass: string;
 
     constructor(id: number, fileName: string){
         this.id = id;
@@ -13,6 +14,7 @@ export class ImageDTO {
         this.isImageFliped = false;
         this.isCardOutOfGame = false;
         this.backFileName = 'assets/img/interrogacao.png';
+        this.ifFlipClass = '';
     }
 
 }

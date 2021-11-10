@@ -3,16 +3,15 @@
 </div>
 
 <br>
-
-<span *ngFor="let image of images">
-    <span *ngIf="!image.isCardOutOfGame">
-        <span class="border border-dark card div-card" (click)="trataClick(image)" id="{{image.id}}">
-            <img src="{{image.fileName}}">
-        </span>
-    </span>
-    <span *ngIf="image.isCardOutOfGame">
-        <span class="border border-dark card div-card" id="{{image.id}}">
-        </span>
-    </span>
-</span>
-
+<div class="memory-game">
+    <div *ngFor="let image of images" class="image">
+        <div *ngIf="!image.isCardOutOfGame" class="card center {{image.ifFlipClass}}" (click)="trataClick(image)">
+            <div class="face card-front"><img src="{{image.frontFileName}}" class=""></div>
+            <div class="face card-back"><img src="{{image.backFileName}}" class=""></div>
+        </div>
+        <div *ngIf="image.isCardOutOfGame">
+            <div class="card" id="{{image.id}}">
+            </div>
+        </div>
+    </div>
+</div>
