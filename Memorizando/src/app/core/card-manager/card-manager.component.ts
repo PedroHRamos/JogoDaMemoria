@@ -29,17 +29,15 @@ export class CardManagerComponent implements OnInit {
     this.matchesCount = 0;
     this.cardsActivesCount = 0;
     this.pointsUserDRAFT = 0;
-    this.imagePath = 'assets/img/';
+    this.imagePath = '/assets/img/';
     this.isGameOn = true;
 
 
     this.numberOfCards = 4;
     for ( let i = 0; i < this.numberOfCards * 2; i++){
-      console.log(this.imageNames[this.imageNames.length - 1]);
       this.image = new ImageDTO(i, this.imagePath + this.imageNames[this.imageNames.length - 1]);
       this.images.push(this.image);
       i++;
-      console.log(this.imageNames[this.imageNames.length - 1]);
       this.image = new ImageDTO(i, this.imagePath + this.imageNames[this.imageNames.length - 1]);
       this.images.push(this.image);
       this.imageNames.pop();
@@ -51,7 +49,6 @@ export class CardManagerComponent implements OnInit {
 
   ngOnInit(): void {
     this.webSocketService.listen('test event', ).subscribe((data) => {
-      console.log(data);
     });
   }
 
@@ -64,8 +61,6 @@ export class CardManagerComponent implements OnInit {
       const imageclicked = 'Imagem Clicada: \n\t id: ' + imagem.id + '\n\t FrontFile: '
       + imagem.frontFileName + '\n\t FileName: ' + imagem.fileName + '\n\t OutOfGame: ' + imagem.isCardOutOfGame
       + '\n\t isImageFliped: ' + imagem.isImageFliped;
-
-      console.log(imageclicked);
 
       if ( this.cardsActivesCount === 2 ){
 
